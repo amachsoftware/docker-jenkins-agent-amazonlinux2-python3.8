@@ -7,6 +7,6 @@ USER root
 RUN yum install -y python3-pip
 RUN yum clean all
 
-SER ${user}
+USER ${user}
 
 ENTRYPOINT ["jenkins-agent"]

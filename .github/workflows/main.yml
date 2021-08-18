@@ -1,0 +1,28 @@
+name: jenkins-agent-amazonlinux2-python3
+
+on:
+  push:
+    branches:
+      - "main"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login to Packages Container registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - run: echo "TODAY=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
+    - name: build :${{env.TODAY}} image
+      run: |
+        docker build -t ghcr.io/lazzurs/jenkins-agent-amazonlinux2-python3:${{env.TODAY}} .
+    - name: publish jenkins-agent-amazonlinux2-python3:${{env.TODAY}} image
+      run: |
+        docker push ghcr.io/lazzurs/jenkins-agent-amazonlinux2-python3:${{env.TODAY}}
+        docker tag ghcr.io/lazzurs/jenkins-agent-amazonlinux2-python3:${{env.TODAY}} ghcr.io/lazzurs/jenkins-agent-amazonlinux2-python3:latest
+        docker push ghcr.io/lazzurs/jenkins-agent-amazonlinux2-python3:latest

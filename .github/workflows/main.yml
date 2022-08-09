@@ -19,25 +19,19 @@ jobs:
   buildx:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Login to Packages Container registry
-      uses: docker/login-action@v1
+      uses: docker/login-action@v2
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-    - name: Login to Docker Hub registry
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKER_HUB_USER }}
-        password: ${{ secrets.DOCKER_HUB_KEY }}
     - name: Docker meta
       id: meta
       uses: docker/metadata-action@v3
       with:
         images: |
-          ghcr.io/lazzurs/jenkins-agent-amazonlinux2-python3
-          lazzurs/jenkins-agent-amazonlinux2-python3
+          ghcr.io/amachsoftware/jenkins-agent-amazonlinux2-python3
         tags: |
           type=raw,value={{date 'YYYYMMDD'}}
           type=sha
